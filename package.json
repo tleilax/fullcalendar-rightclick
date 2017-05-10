@@ -1,6 +1,6 @@
 {
   "name": "fullcalendar-rightclick",
-  "version": "1.8",
+  "version": "1.8.0",
   "description": "Rightclick support for Adam Shaw's FullCalendar jQuery plugin.",
   "repository": "tleilax/fullcalendar-rightclick",
   "license": "MIT",
