@@ -24,8 +24,8 @@
                 if (eventElt.length) {
                     var seg = eventElt.data('fc-seg');
                     // check fullcalar version
-                    if ($.fullCalendar.version == "3.1.0") {
-                          return that.publiclyTrigger('eventRightclick', this, seg.event, ev);
+                    if ('publiclyTrigger' in that) {
+                        return that.publiclyTrigger('eventRightclick', this, seg.event, ev);
                     }
                     return that.trigger('eventRightclick', this, seg.event, ev);
                 } else {
@@ -49,8 +49,8 @@
                         }
                         if (cell) {
                              // check fullcalar version
-                            if ($.fullCalendar.version == "3.1.0") {
-                                  return that.publiclyTrigger('dayRightclick', null, cell.start, ev);
+                             if ('publiclyTrigger' in that) {
+                                return that.publiclyTrigger('dayRightclick', null, cell.start, ev);
                             }
                             return that.trigger('dayRightclick', null, cell.start, ev);
                         }
