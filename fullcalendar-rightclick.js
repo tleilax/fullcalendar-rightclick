@@ -19,7 +19,6 @@
         View.prototype.registerRightclickListener = function() {
             var that = this;
             this.el.on('contextmenu', function(ev) {
-                ev.preventDefault();
                 var eventElt = $(ev.target).closest('.fc-event');
                 if (eventElt.length) {
                     var seg = eventElt.data('fc-seg');
