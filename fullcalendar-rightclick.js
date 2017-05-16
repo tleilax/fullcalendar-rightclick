@@ -27,32 +27,43 @@
                         return that.publiclyTrigger('eventRightclick', this, seg.event, ev);
                     }
                     return that.trigger('eventRightclick', this, seg.event, ev);
-                } else {
-                    // Users of this library may add custom content inside
-                    // FullCalendar's DOM structure, eg. popovers. We don't want
-                    // to catch rightclicks on these custom elements, so we
-                    // check that the clicked element actually lies inside one
-                    // of FullCalendars default containers:
-                    var fcContainer = $(ev.target).closest('.fc-bg, .fc-slats, .fc-content-skeleton, ' + '.fc-bgevent-skeleton, .fc-highlight-skeleton');
-                    if (fcContainer.length) {
-                        var cell;
-                        if (that.coordMap) {
-                            // FullCalendar < 2.5.0:
-                            that.coordMap.build();
-                            cell = that.coordMap.getCell(ev.pageX, ev.pageY);
-                        } else {
-                            // FullCalendar >= 2.5.0:
-                            that.prepareHits();
-                            var hit = that.queryHit(ev.pageX, ev.pageY);
-                            cell = that.getHitSpan(hit);
+                }
+
+                // Background events: There's no real data we can obtain from
+                // a background event so we'll just set the triggered element
+                // as context and pass null as context as well as the js event
+                eventElt = $(ev.target).closest('.fc-bgevent');
+                if (eventElt.length) {
+                    if ('publiclyTrigger' in that) {
+                        return that.publiclyTrigger('bgEventRightclick', this, null, ev);
+                    }
+                    return that.trigger('bgEventRightclick', this, null, ev);
+                }
+
+                // Users of this library may add custom content inside
+                // FullCalendar's DOM structure, eg. popovers. We don't want
+                // to catch rightclicks on these custom elements, so we
+                // check that the clicked element actually lies inside one
+                // of FullCalendars default containers:
+                var fcContainer = $(ev.target).closest('.fc-bg, .fc-slats, .fc-content-skeleton, ' + '.fc-bgevent-skeleton, .fc-highlight-skeleton');
+                if (fcContainer.length) {
+                    var cell;
+                    if (that.coordMap) {
+                        // FullCalendar < 2.5.0:
+                        that.coordMap.build();
+                        cell = that.coordMap.getCell(ev.pageX, ev.pageY);
+                    } else {
+                        // FullCalendar >= 2.5.0:
+                        that.prepareHits();
+                        var hit = that.queryHit(ev.pageX, ev.pageY);
+                        cell = that.getHitSpan(hit);
+                    }
+                    if (cell) {
+                         // check fullcalar version
+                         if ('publiclyTrigger' in that) {
+                            return that.publiclyTrigger('dayRightclick', null, cell.start, ev);
                         }
-                        if (cell) {
-                             // check fullcalar version
-                             if ('publiclyTrigger' in that) {
-                                return that.publiclyTrigger('dayRightclick', null, cell.start, ev);
-                            }
-                            return that.trigger('dayRightclick', null, cell.start, ev);
-                        }
+                        return that.trigger('dayRightclick', null, cell.start, ev);
                     }
                 }
             });
