@@ -34,10 +34,23 @@
                 // as context and pass null as context as well as the js event
                 eventElt = $(ev.target).closest('.fc-bgevent');
                 if (eventElt.length) {
-                    if ('publiclyTrigger' in that) {
-                        return that.publiclyTrigger('bgEventRightclick', this, null, ev);
+                    var cell;
+                    if (that.coordMap) {
+                        // FullCalendar < 2.5.0:
+                        that.coordMap.build();
+                        cell = that.coordMap.getCell(ev.pageX, ev.pageY);
+                    } else {
+                        // FullCalendar >= 2.5.0:
+                        that.prepareHits();
+                        var hit = that.queryHit(ev.pageX, ev.pageY);
+                        cell = that.getHitSpan(hit);
                     }
-                    return that.trigger('bgEventRightclick', this, null, ev);
+                    if (cell) {
+                        if ('publiclyTrigger' in that) {
+                            return that.publiclyTrigger('bgEventRightclick', this, cell.start, ev);
+                        }
+                        return that.trigger('bgEventRightclick', this, cell.start, ev);
+                    }
                 }
 
                 // Users of this library may add custom content inside
